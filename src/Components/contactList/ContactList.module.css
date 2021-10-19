@@ -1,0 +1,17 @@
+.contactList {
+  list-style: none;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.contactText {
+  margin: 0;
+  margin-right: 10px;
+  padding: 0;
+  color: blueviolet;
+}

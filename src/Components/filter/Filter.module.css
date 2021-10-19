@@ -1,0 +1,11 @@
+.filterInput {
+  border-radius: 5px;
+  border: 1px solid blueviolet;
+  margin-left: 10px;
+}
+
+.filterLabel {
+  display: block;
+  text-align: center;
+  color: blueviolet;
+}
