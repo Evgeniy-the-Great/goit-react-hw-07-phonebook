@@ -1,20 +1,28 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { getContacts } from "../../redux/contacts/contactsActions";
+import { useDispatch, useSelector } from "react-redux";
+import { getContactOperation } from "../../redux/contacts/contactsOperation";
+import {
+  errorSelector,
+  loaderSelector,
+} from "../../redux/contacts/contactsSelectors";
 import ContactForm from "../contactForm/ContactForm ";
 import ContactList from "../contactList/ContactList";
 import Filter from "../filter/Filter";
 import styles from "./App.module.css";
 
-const App = ({ contactList, getContacts }) => {
-  useEffect(() => {
-    getContacts && getContacts(JSON.parse(localStorage.getItem("contacts")));
-  }, [getContacts]);
+const App = () => {
+  const loader = useSelector(loaderSelector);
+  const error = useSelector(errorSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    contactList &&
-      localStorage.setItem("contacts", JSON.stringify(contactList));
-  }, [contactList]);
+    dispatch(getContactOperation());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   contactList &&
+  //     localStorage.setItem("contacts", JSON.stringify(contactList));
+  // }, [contactList]);
 
   return (
     <>
@@ -23,18 +31,12 @@ const App = ({ contactList, getContacts }) => {
         <ContactForm />
         <h2>Contacts</h2>
         <Filter />
+        {loader && <h2>...loading</h2>}
+        {error && <h2>{error}</h2>}
         <ContactList />
       </div>
     </>
   );
 };
 
-const mapStateToProps = (state) => ({
-  contactList: state.contacts.items,
-});
-
-const mapDispatchToProps = {
-  getContacts,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

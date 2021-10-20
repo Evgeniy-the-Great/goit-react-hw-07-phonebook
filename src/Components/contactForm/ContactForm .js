@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { addContact } from "../../redux/contacts/contactsActions";
+import { useDispatch, useSelector } from "react-redux";
+// import { addContact } from "../../redux/contacts/contactsActions";
+import { addContactOperation } from "../../redux/contacts/contactsOperation";
+import { contactListSelector } from "../../redux/contacts/contactsSelectors";
 import styles from "./ContactForm.module.css";
 
 const initialState = {
@@ -8,8 +10,10 @@ const initialState = {
   number: "",
 };
 
-const ContactForm = ({ addContact, contactList }) => {
+const ContactForm = () => {
   const [form, setForm] = useState(initialState);
+  const contactList = useSelector(contactListSelector);
+  const dispatch = useDispatch();
 
   const onHandleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +32,7 @@ const ContactForm = ({ addContact, contactList }) => {
       return;
     }
 
-    addContact(form);
+    dispatch(addContactOperation(form));
 
     reset();
   };
@@ -72,12 +76,4 @@ const ContactForm = ({ addContact, contactList }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  contactList: state.contacts.items,
-});
-
-const mapDispatchToProps = {
-  addContact,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+export default ContactForm;
