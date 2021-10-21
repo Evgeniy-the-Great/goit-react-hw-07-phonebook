@@ -1,29 +1,36 @@
 import axios from "axios";
 import {
-  addContact,
-  deleteContact,
-  getContacts,
-  setError,
-  setLoader,
+  addContactError,
+  addContactRequest,
+  addContactSuccess,
+  deleteContactError,
+  deleteContactRequest,
+  deleteContactSuccess,
+  getContactsError,
+  getContactsRequest,
+  getContactsSuccess,
+  setEr,
 } from "./contactsActions";
 
+// ===========addContactOperation===============
+
 const addContactOperation = (contacts) => async (dispatch) => {
-  dispatch(setLoader());
+  dispatch(addContactRequest());
   try {
     const response = await axios.post(
       `https://phonebook-de2b8-default-rtdb.firebaseio.com/contacts.json`,
       contacts
     );
-    dispatch(addContact({ ...contacts, id: response.data.name }));
+    dispatch(addContactSuccess({ ...contacts, id: response.data.name }));
   } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoader());
+    dispatch(addContactError(error.message));
   }
 };
 
+// ===========getContactOperation===============
+
 const getContactOperation = () => async (dispatch) => {
-  dispatch(setLoader());
+  dispatch(getContactsRequest());
   try {
     const response = await axios.get(
       `https://phonebook-de2b8-default-rtdb.firebaseio.com/contacts.json`
@@ -34,27 +41,25 @@ const getContactOperation = () => async (dispatch) => {
         id: key,
         ...response.data[key],
       }));
-      dispatch(getContacts(contacts));
+      dispatch(getContactsSuccess(contacts));
     }
   } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoader());
+    dispatch(getContactsError(error.message));
   }
 };
 
+// ===========deleteContactOperation===============
+
 const deleteContactOperation = (id) => async (dispatch) => {
-  dispatch(setLoader());
+  dispatch(deleteContactRequest());
   try {
     await axios.delete(
       `https://phonebook-de2b8-default-rtdb.firebaseio.com/contacts/${id}.json`
     );
 
-    dispatch(deleteContact(id));
+    dispatch(deleteContactSuccess(id));
   } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoader());
+    dispatch(deleteContactError(error.message));
   }
 };
 

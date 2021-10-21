@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { resetError } from "../../redux/contacts/contactsActions";
 // import { addContact } from "../../redux/contacts/contactsActions";
 import { addContactOperation } from "../../redux/contacts/contactsOperation";
 import { contactListSelector } from "../../redux/contacts/contactsSelectors";
@@ -13,10 +14,12 @@ const initialState = {
 const ContactForm = () => {
   const [form, setForm] = useState(initialState);
   const contactList = useSelector(contactListSelector);
+  const error = useSelector((state) => state.contacts.error);
   const dispatch = useDispatch();
 
   const onHandleChange = (e) => {
     const { name, value } = e.target;
+    error && dispatch(resetError());
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
